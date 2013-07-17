@@ -52,8 +52,10 @@ docker attach $CONTAINER
 # As soon as the process exits, get its return value.
 RC=$(docker wait $CONTAINER)
 
-# Delete the container we've just used to free unused disk space.
-# as well as the temporary mount directory.
+### CLEANUP
+### Delete the container we've just used to free unused disk space.
+### as well as the temporary mount directory.
+
 docker rm $CONTAINER
 rm -R "$MNT/log"
 rm -R "$MNT/db"
