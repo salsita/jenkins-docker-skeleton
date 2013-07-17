@@ -43,9 +43,6 @@ mkdir "$MNT/db"
 ### RUN
 ### Execute the build inside Docker.
 
-# Have to find out how to name that image ID better...
-# In any case, it's CentOS with Node.js and MongoDB...
-
 # Run in the background so that we know the container id.
 CONTAINER=$(docker run -d -b "$MNT:/mnt/project" $IMAGE /bin/bash -c 'ls -la /mnt/project/workspace')
 
