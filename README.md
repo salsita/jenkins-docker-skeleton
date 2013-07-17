@@ -17,47 +17,7 @@ These are the basic ideas that are behind the whole thing.
 
 ## Example
 
-### Dockerfile
-
-```
-FROM tchap/centos-epel
- 
-MAINTAINER Ondrej Kupka "ondrejk@salsitasoft.com"
- 
-# Update packages
-RUN yum update -y --exclude=upstart
- 
-# Install Node.js
-RUN yum install -y nodejs npm
- 
-# Install MongoDB
-RUN yum install -y mongodb-server
- 
-# Install Supervisord
-RUN yum install -y python-setuptools
-RUN easy_install supervisor
- 
-# Copy Supervisord files into the image
-ADD supervisord.conf /etc/supervisord.conf
-ADD supervisord.d    /etc/supervisord.d
- 
-# Expose 3000
-EXPOSE 3000
- 
-# Run Supervisord on image start
-# It could be just "supervisord", but let's get rid of a few WARNing messages.
-CMD ["supervisord", "-c", "/etc/supervisord.conf"]
-```
-
-You can find a demo `supervisord.conf` and `supervisord.d` in this repository.
-
-### `install` Script
-
-This script will be run inside of the container in the directory containing the project sources. It should contain things like `npm install` to get your Node.js packages and stuff like that.
-
-### `test` Script
-
-TBD
+All the necessary (exemplar) files are or will be in this repository. Everything is instrumented by the Jenkins job mentioned below.
 
 ### Jenkins Job
 
