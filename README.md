@@ -61,10 +61,14 @@ TBD
 
 ### Jenkins Job
 
-1. Set up custom workspace to be `/tmp/jenkins-buildenv/${JOB_NAME}/workspace` and check `Delete workspace before build starts`.
+1. Set up custom workspace to be `/tmp/jenkins-buildenv/${JOB\_NAME}/workspace` and check `Delete workspace before build starts`.
 2. The Shell build step follows.
 
-```
+```bash
+### BUILD
+### Build the image to be used for this run.
+IMAGE=$(docker build . | tail -1 | awk '{ print $NF }')
+
 ### INIT
 ### Build the directory to be mounted into Docker.
 
@@ -83,7 +87,7 @@ mkdir "$MNT/db"
 # In any case, it's CentOS with Node.js and MongoDB...
 
 # Run in the background so that we know the container id.
-CONTAINER=$(docker run -d -b "$MNT:/mnt/project" 4dd5fb10358d /bin/bash -c 'ls -la /mnt/project/workspace')
+CONTAINER=$(docker run -d -b "$MNT:/mnt/project" $IMAGE /bin/bash -c 'ls -la /mnt/project/workspace')
 
 # Attach to the container's streams so that we can see the output.
 docker attach $CONTAINER
