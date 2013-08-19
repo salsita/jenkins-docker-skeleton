@@ -21,7 +21,7 @@ All the necessary (exemplar) files are or will be in this repository. Everything
 
 ### Jenkins Job
 
-1. Set up custom workspace to be `/tmp/jenkins-buildenv/${JOB_NAME}/workspace` and check `Delete workspace before build starts`.
+1. Set up custom workspace to be `/tmp/jenkins-buildenv/${JOB_NAME}/${BUILD_NUMBER}/src`.
 2. The Shell build step follows.
 
 ```bash
