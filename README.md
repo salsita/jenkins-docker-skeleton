@@ -26,27 +26,30 @@ All the necessary (exemplar) files are or will be in this repository. Everything
 
 ```bash
 # Get around current version permissions issues. Use TCP instead of a UNIX socket.
-DOCKER="docker -H tcp://127.0.0.1:23456"
+DOCKER="docker -H tcp://127.0.0.1"
 
-### INIT
-### Build the directory to be mounted into Docker.
-
-MNT="$WORKSPACE/.."
-
+### INIT - Build the directory to be mounted into Docker.
 # Create log and db to hold output and db files from the build.
 # This is not that much of use for builds, but will be useful for production
 # where those files are supposed to be persistent.
+MNT="$WORKSPACE/.."
 mkdir "$MNT/log"
 mkdir "$MNT/db"
+
+### BUILD - Build the Docker image to use for the job.
+# A good idea might be to dispose of those cached images regularly, like every day.
+# This stuff can be written better, but then it does not work in Jenkins because of how
+# streams are being handled.
+$DOCKER build . > "$MNT/docker_build.log"
+cat "$MNT/docker_build.log"
+IMAGE=$(cat "$MNT/docker_build.log" | tail -1 | awk '{ print $NF }')
 
 ### RUN
 ### Execute the build inside Docker.
 
-# Have to find out how to name that image ID better...
-# In any case, it's CentOS with Node.js and MongoDB...
-
 # Run in the background so that we know the container id.
-CONTAINER=$($DOCKER run -d -e PROJECT_HOME="/mnt/project" -v "$MNT:/mnt/project" 4dd5fb10358d /bin/bash -c 'ls -la "$PROJECT_HOME" && ls -la "$PROJECT_HOME/src"')
+# Use the image we've just built.
+CONTAINER=$($DOCKER run -d -e PROJECT_HOME="/mnt/project" -v "$MNT:/mnt/project" $IMAGE /bin/bash -c 'ls -la "$PROJECT_HOME" && ls -la "$PROJECT_HOME/src"')
 
 # Attach to the container's streams so that we can see the output.
 $DOCKER attach $CONTAINER
