@@ -1,4 +1,4 @@
-# docker-jenkins-skeleton
+# jenkins-docker-skeleton
 
 This repository contains a small tutorial on how to structure your app so that you can run and test it in Docker in the same way Salsita is probably going to do one day.
 
